@@ -2,13 +2,14 @@ package com.github.ardatosun.adventofcode2024.puzzles.day1;
 
 import com.github.ardatosun.adventofcode2024.puzzles.Utils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 
-public class Puzzle1 {
+public class Part2 {
     public static void main(String[] args) {
-        String fileName = "day1/Puzzle1.txt";
+        String fileName = "day1/Puzzle.txt";
         ArrayList<Integer> leftList = new ArrayList<>();
         ArrayList<Integer> rightList = new ArrayList<>();
 
@@ -26,14 +27,17 @@ public class Puzzle1 {
             return;
         }
 
-        Collections.sort(leftList);
-        Collections.sort(rightList);
-
-        int totalDistance = 0;
-        for (int i = 0; i < leftList.size(); i++) {
-            totalDistance += Math.abs(leftList.get(i) - rightList.get(i));
+        HashMap<Integer, Integer> rightListCounts = new HashMap<>();
+        for (int num : rightList) {
+            rightListCounts.put(num, rightListCounts.getOrDefault(num, 0) + 1);
         }
 
-        System.out.println("The total distance is: " + totalDistance); // 1580061
+        int similarityScore = 0;
+        for (int num : leftList) {
+            int countInRightList = rightListCounts.getOrDefault(num, 0);
+            similarityScore += num * countInRightList;
+        }
+
+        System.out.println("The similarity score is: " + similarityScore);
     }
 }

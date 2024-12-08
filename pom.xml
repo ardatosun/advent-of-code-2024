@@ -14,6 +14,7 @@
     </properties>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
