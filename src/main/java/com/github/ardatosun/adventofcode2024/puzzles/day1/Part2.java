@@ -38,6 +38,6 @@ public class Part2 {
             similarityScore += num * countInRightList;
         }
 
-        System.out.println("The similarity score is: " + similarityScore);
+        System.out.println("The similarity score is: " + similarityScore); // 23046913
     }
 }
