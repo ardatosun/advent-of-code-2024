@@ -6,8 +6,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
-public class Part1 {
+public class Puzzle {
     public static void main(String[] args) {
         String fileName = "day1/Puzzle.txt";
         ArrayList<Integer> leftList = new ArrayList<>();
@@ -27,14 +28,27 @@ public class Part1 {
             return;
         }
 
-        Collections.sort(leftList);
-        Collections.sort(rightList);
+        ArrayList<Integer> sortedLeft = new ArrayList<>(leftList);
+        ArrayList<Integer> sortedRight = new ArrayList<>(rightList);
+        Collections.sort(sortedLeft);
+        Collections.sort(sortedRight);
 
         int totalDistance = 0;
-        for (int i = 0; i < leftList.size(); i++) {
-            totalDistance += Math.abs(leftList.get(i) - rightList.get(i));
+        for (int i = 0; i < sortedLeft.size(); i++) {
+            totalDistance += Math.abs(sortedLeft.get(i) - sortedRight.get(i));
+        }
+        System.out.println("The total distance is: " + totalDistance); // 1580061
+
+        HashMap<Integer, Integer> rightListCounts = new HashMap<>();
+        for (int num : rightList) {
+            rightListCounts.put(num, rightListCounts.getOrDefault(num, 0) + 1);
+        }
+        int similarityScore = 0;
+        for (int num : leftList) {
+            int countInRightList = rightListCounts.getOrDefault(num, 0);
+            similarityScore += num * countInRightList;
         }
 
-        System.out.println("The total distance is: " + totalDistance); // 1580061
+        System.out.println("The similarity score is: " + similarityScore); // 23046913
     }
 }
