@@ -12,7 +12,9 @@ public class Puzzle {
         String fileName = "day3/Puzzle.txt";
         StringBuilder input = new StringBuilder();
         String mulRegex = "mul\\((\\d+),(\\d+)\\)";
+        String toggleRegex = "do\\(\\)|don't\\(\\)";
         Pattern mulPattern = Pattern.compile(mulRegex);
+        Pattern togglePattern = Pattern.compile(toggleRegex);
 
         try (BufferedReader reader = Utils.getResourceFileReader(fileName)) {
             String line;
@@ -24,13 +26,31 @@ public class Puzzle {
             return;
         }
 
+        int currentIndex = 0;
+        boolean isEnabled = true;
         int totalSum = 0;
-        Matcher matcher = mulPattern.matcher(input.toString());
-        while (matcher.find()) {
-            int x = Integer.parseInt(matcher.group(1));
-            int y = Integer.parseInt(matcher.group(2));
+        int totalSumEnabled = 0;
+        Matcher mulMatcher = mulPattern.matcher(input.toString());
+        Matcher toggleMatcher = togglePattern.matcher(input.toString());
+        while (mulMatcher.find()) {
+            int x = Integer.parseInt(mulMatcher.group(1));
+            int y = Integer.parseInt(mulMatcher.group(2));
             totalSum += x * y;
+
+            while (toggleMatcher.find(currentIndex) && toggleMatcher.start() < mulMatcher.start()) {
+                String toggle = toggleMatcher.group();
+                if (toggle.equals("do()")) {
+                    isEnabled = true;
+                } else if (toggle.equals("don't()")) {
+                    isEnabled = false;
+                }
+                currentIndex = toggleMatcher.end();
+            }
+            if (isEnabled) {
+                totalSumEnabled += x * y;
+            }
         }
         System.out.println("The total sum of all valid mul instructions is: " + totalSum); // 165225049
+        System.out.println("The total sum of all valid and enabled mul instructions is: " + totalSumEnabled); // 108830766
     }
 }
